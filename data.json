@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "text": "Finish Go CLI core",
+    "date": "2025-06-28",
+    "completed": false
+  },
+  {
+    "id": 2,
+    "text": "Start HuggingFace API integration",
+    "date": "2025-06-28",
+    "completed": false
+  }
+]
