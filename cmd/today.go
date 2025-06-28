@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-func Today(args []string) {
-    store := internal.NewStorage("data.json")
+func Today(store *internal.Storage, args []string) {
+    // store := internal.NewStorage("data.json")
     tasks, err := store.GetTasks()
     if err != nil {
         fmt.Println("Failed to get tasks:", err)

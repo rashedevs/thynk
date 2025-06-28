@@ -3,12 +3,24 @@
     "id": 1,
     "text": "Finish Go CLI core",
     "date": "2025-06-28",
-    "completed": false
+    "completed": true
   },
   {
     "id": 2,
     "text": "Start HuggingFace API integration",
     "date": "2025-06-28",
+    "completed": false
+  },
+  {
+    "id": 3,
+    "text": "Finish update status",
+    "date": "2025-06-29",
+    "completed": true
+  },
+  {
+    "id": 4,
+    "text": "Write Go CLI tests",
+    "date": "2025-06-29",
     "completed": false
   }
 ]

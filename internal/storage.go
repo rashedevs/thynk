@@ -3,7 +3,9 @@ package internal
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"fmt"
+
+	// "io/ioutil"
 	"os"
 	"sync"
 )
@@ -34,9 +36,8 @@ func (s *Storage) load() error {
         return nil
     }
 
-b, err := ioutil.ReadFile(s.Filename)
+b, err := os.ReadFile(s.Filename)
 if err != nil {
-    // If file does not exist, initialize empty slice and return no error
     if errors.Is(err, os.ErrNotExist) {
         s.Tasks = []Task{}
         return nil
@@ -62,7 +63,7 @@ func (s *Storage) save() error {
         return err
     }
 
-    return ioutil.WriteFile(s.Filename, b, 0644)
+    return os.WriteFile(s.Filename, b, 0644)
 }
 
 func (s *Storage) AddTask(text, date string) (Task, error) {
@@ -96,4 +97,71 @@ func (s *Storage) GetTasks() ([]Task, error) {
         return nil, err
     }
     return s.Tasks, nil
+}
+
+func (s *Storage) CompleteTask(id int) error {
+    if err := s.load(); err != nil {
+            return err
+        }
+
+    for i, task := range s.Tasks {
+        if task.ID == id {
+            if s.Tasks[i].Completed {
+                return fmt.Errorf("task %d is already marked as complete", id)
+            }
+            s.Tasks[i].Completed = true
+            return s.save()
+        }
+    }
+    return fmt.Errorf("task with ID %d not found", id)
+}
+
+// func (s *Storage) ListTasks() {
+//     if err := s.load(); err != nil {
+//         fmt.Println("Failed to load tasks:", err)
+//         return
+//     }
+//     if len(s.Tasks) == 0 {
+//         fmt.Println("No tasks found.")
+//         return
+//     }
+
+//     for _, task := range s.Tasks {
+//         status := "❌"
+//         if task.Completed {
+//             status = "✅"
+//         }
+
+//         fmt.Printf("%s %d. %s", status, task.ID, task.Text)
+//         if task.Date != "" {
+//             fmt.Printf(" (Due: %s)", task.Date)
+//         }
+//         fmt.Println()
+//     }
+// }
+
+func (s *Storage) ListTasks() error {
+    if err := s.load(); err != nil {
+        return err
+    }
+
+    if len(s.Tasks) == 0 {
+        fmt.Println("No tasks found.")
+        return nil
+    }
+
+    for _, task := range s.Tasks {
+        status := "❌"
+        if task.Completed {
+            status = "✅"
+        }
+
+        fmt.Printf("%s %d. %s", status, task.ID, task.Text)
+        if task.Date != "" && !task.Completed {
+            fmt.Printf(" (Due: %s)", task.Date)
+        }
+        fmt.Println()
+    }
+
+    return nil
 }

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Add(args []string) {
+func Add(store *internal.Storage, args []string) {
     addFlagSet := flag.NewFlagSet("add", flag.ExitOnError)
     datePtr := addFlagSet.String("date", "", "Date for the task in YYYY-MM-DD (optional)")
 
@@ -31,11 +31,13 @@ func Add(args []string) {
         _, err := time.Parse("2006-01-02", date)
         if err != nil {
             fmt.Println("Invalid date format. Use YYYY-MM-DD")
+            fmt.Println("Parse error:", err)
             return
         }
     }
 
-    store := internal.NewStorage("data.json")
+
+    // store := internal.NewStorage("data.json")
     task, err := store.AddTask(text, date)
     if err != nil {
         fmt.Println("Failed to add task:", err)
