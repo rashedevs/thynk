@@ -6,10 +6,15 @@ import (
 	"strconv"
 	"thynk/cmd"
 	"thynk/internal"
-	// "storage"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+    err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Warning: .env file not found or failed to load")
+	}
     if len(os.Args) < 2 {
         fmt.Println("Usage: thynk <command> [arguments]")
         fmt.Println("Commands: add, today, list, complete")
@@ -44,6 +49,8 @@ func main() {
             fmt.Printf("✅ Task %d marked as completed.\n", id)
         }
 
+    case "ask":
+		cmd.Ask(args)    
     default:
         fmt.Println("Unknown command:", cmdName)
     }
